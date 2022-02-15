@@ -23,13 +23,13 @@
 <meta property="og:site_name" content="Kevin的个人博客">
 <meta property="og:description" content="在吴恩达的课程中提到了两个公式分别是最小二乘法和极大似然估计 \[ \mathscr{L}\left(\hat{y}, y\right) &#x3D; \frac{1}{2}\left(\hat{y}-y\right)^2 \] \[ \mathscr{L}\left(\hat{y}, y\right) &#x3D; -\left(y\log\hat{y} + \left(1-y\right)\log\left(1-">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i0.hdslb.com/bfs/article/c9ae479fee42ac6ebd90dcb960aec72ec926bd5f.png@942w_564h_progressive.png">
-<meta property="og:image" content="https://i0.hdslb.com/bfs/article/bacfcc010cdd58ecb38063d4ee08b6153b150c0a.png@942w_567h_progressive.png">
-<meta property="og:image" content="https://i0.hdslb.com/bfs/article/4ab09f469008f93a1341e23ac2e8751e2a68c27f.png@942w_572h_progressive.png">
-<meta property="og:image" content="https://i0.hdslb.com/bfs/article/2eddf21423ed4fc545d7a150c5e507473c817487.jpg@942w_531h_progressive.jpg">
-<meta property="og:image" content="https://i0.hdslb.com/bfs/article/ae305c47cc4014af3104a0a4dabc3db2de9f4e1b.jpg@942w_531h_progressive.jpg">
+<meta property="og:image" content="https://s2.loli.net/2022/02/15/wg5ku7TptZOxmFD.png">
+<meta property="og:image" content="https://s2.loli.net/2022/02/15/QOl5L4mJ2xiGs3b.png">
+<meta property="og:image" content="https://s2.loli.net/2022/02/15/wLtsdqhBnvKE9DN.png">
+<meta property="og:image" content="https://s2.loli.net/2022/02/15/EiGltnaHBCNz5pg.jpg">
+<meta property="og:image" content="https://s2.loli.net/2022/02/15/bOhnN2xtA37XlGD.jpg">
 <meta property="article:published_time" content="2022-02-13T08:42:43.000Z">
-<meta property="article:modified_time" content="2022-02-15T02:12:44.399Z">
+<meta property="article:modified_time" content="2022-02-15T04:19:45.791Z">
 <meta property="article:author" content="Kevin Zheng">
 <meta property="article:tag" content="机器学期">
 <meta property="article:tag" content="损失函数">
@@ -37,7 +37,7 @@
 <meta property="article:tag" content="最小二乘法">
 <meta property="article:tag" content="极大似然估计">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://i0.hdslb.com/bfs/article/c9ae479fee42ac6ebd90dcb960aec72ec926bd5f.png@942w_564h_progressive.png">
+<meta name="twitter:image" content="https://s2.loli.net/2022/02/15/wg5ku7TptZOxmFD.png">
   
   
   <title>“损失函数”是如何设计出来的？直观理解“最小二乘法”和“极大似然估计法” - Kevin的个人博客</title>
@@ -262,7 +262,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2 小时前
+                  本文最后更新于：几秒前
                 
               </p>
             
@@ -295,10 +295,7 @@
 <p>第一个式子是怎么设计出来的，这个问题我解决了。那第二个式子又是如何设计出来的？它又为什么叫做极大似然估计法，似然又是个啥？</p>
 <p>要想明白这些，就需要切换一下视角了，需要从概率的视角来看深度学习问题。</p>
 <p>怎么切换成概率呢？我们可以先来看一下最理想的情况，比如，我们可以想象一下，把真实规律用概率分布的方式表示出来，会是什么样子。 （假如说就是判断是一个非猫即狗的二分问题）</p>
-<figure>
-<img src="https://i0.hdslb.com/bfs/article/c9ae479fee42ac6ebd90dcb960aec72ec926bd5f.png@942w_564h_progressive.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<p>也就是说，只要图片是猫，那么判断的结果一定不会是狗；如果图片是狗，那么判断的结果就一定不是猫，没有任何判断错误的情况出现。（注意：“具体一个猫的图片判断结果也是猫”这个事件的概率并不等于1，“所有猫的图片都判断成猫”、“所有狗的图片都判断成狗”，它们这些事件的概率全加起来才是1）</p>
+<p><img src="https://s2.loli.net/2022/02/15/wg5ku7TptZOxmFD.png" srcset="/img/loading.gif" lazyload>也就是说，只要图片是猫，那么判断的结果一定不会是狗；如果图片是狗，那么判断的结果就一定不是猫，没有任何判断错误的情况出现。（注意：“具体一个猫的图片判断结果也是猫”这个事件的概率并不等于1，“所有猫的图片都判断成猫”、“所有狗的图片都判断成狗”，它们这些事件的概率全加起来才是1）</p>
 <p>但是我们猜测出来的规律呢？虽然仍然可以用一个概率分布来表示，但是就没有这么准了，就算是给了一张猫的图片，但是神经网络还是有概率把它判断成狗。最理想的情况，当然是让我们猜测出来的规律可以和真实规律的概率分布一模一样，但现实是，我们几乎不可能得到和真实规律一模一样的规律，只能近似。（这个原因，需要对PAC框架和VC维理论有比较深入的理解之后才能解释清楚，这里就不多解释了。可以简单的理解为，任何一种机器学习的模型能力都是有限的，所以无法学到真实规律。）</p>
 <p>不过，不论这么样，不论是真实的规律，还是我们猜测的规律，都可以用一个条件概率分布来呈现。我们得到的数据集里面打好标签的数据，其实就是在真实规律这个概率分布下进行抽样得到的结果，而深度学习的过程，就是我们已经有了样本数据，去反推背后概率分布是什么的过程。</p>
 <p>这就相当于，你有一个不知道正反概率是什么的硬币，抛了10次结果是7正3反，如何才能反推出这个硬币正反的真实概率。</p>
@@ -307,17 +304,13 @@
 <p>这么想很符合我们的直觉，但这并不是一件板上钉钉的事情。</p>
 <p>你可以想一下，假如说，我们的硬币是正反概率都是0.5的话，你抛10次，难道就真的能保证一定是5次正、5次反吗？不一定吧，出现6正4反，4正6反也还是挺常见的吧。更甚者，运气好到极点，10次全部是正面也是有可能的。</p>
 <p>那么，当我们不知道硬币正反概率的时候，7正3反，就一定0.7的概率吗？也不一定，对吧。完全有可能是，硬币的概率是0.1正、0.9反，但是运气就是很好，抛出了7正3反的结果。或者是，概率本来是0.8正、0.2反，但是运气就差那么一点，抛出了7正3反。</p>
-<figure>
-<img src="https://i0.hdslb.com/bfs/article/bacfcc010cdd58ecb38063d4ee08b6153b150c0a.png@942w_567h_progressive.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://s2.loli.net/2022/02/15/QOl5L4mJ2xiGs3b.png" srcset="/img/loading.gif" lazyload></p>
 <p>也就是说，我们知道抛硬币的结果（抽样结果），我们没有办法唯一确定一个真实的概率（背后的规律）。就像前面看到的，7正3反的硬币结果，没有办法排除掉任何一种概率，它们都有可能。</p>
 <p>不过，虽然我们没有办法百分百确定样本背后的概率分布原本是什么样子的，但是我们还是可以确定，最有可能情况是什么。</p>
 <p>比如，<span class="math inline">\(C_1\)</span>~<span class="math inline">\(C_{10}\)</span>代表着10次抛硬币的结果，<span class="math inline">\(\theta\)</span>是硬币决定正反概率的属性（这个属性是未知的；也可以直接理解为硬币固有的概率属性），那么抛10次硬币有7次是正面对应的概率就是等号右边这么多。 <span class="math display">\[
 P\left(C_1, C_2, C_3, \cdots, C_{10}\,|\, \theta\right)=\binom{10}{7}\prod_{i=1}^{10}P\left(C_i\,|\,\theta\right)
 \]</span> 有了这个式子之后，我们就可以算出来，如果硬币抛出来正面朝上的概率分别是0.1、0.7和0.8的时候，要想得到抛10次硬币7次朝上的概率分布是多少。</p>
-<figure>
-<img src="https://i0.hdslb.com/bfs/article/4ab09f469008f93a1341e23ac2e8751e2a68c27f.png@942w_572h_progressive.png" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://s2.loli.net/2022/02/15/wLtsdqhBnvKE9DN.png" srcset="/img/loading.gif" lazyload></p>
 <p>大家算一下就知道，显然当正面概率是0.7的时候，发生的概率是最大的。</p>
 <p>所以，我们直觉上觉得抛10次硬币7次正面，硬币的概率应该是0.7，不是没有根据的，这种情况与其他的情况想比，的确是可能性最大的。其实对于任何已经知道了样本，想要反推背后的概率分布，都可以用类似的思路。这种思路，虽然没有办法百分百的知道真实的情况是什么，但是显然猜0.7是正面，这样的正确的可能性最大。对应到深度学习里面也一样，也是已知了一堆样本数据，目的是想办法反推出生成样本数据的真实概率分布。虽然没有办法百分百确定是哪一个，但是我们还是有办法确定哪一个的可能性最大。</p>
 <p>而这个思路，就是最大似然估计法的思路，其中的“最大”这个词，对应的就是前面说的可能性最大。至于为什么是似然值，而不是概率值，这个就用解释一下似然值和概率值的区别了。</p>
@@ -338,14 +331,10 @@ P\left(C\, | \,\theta\right)
 \mathscr{L}\left(\hat{y}, y\right) = -\left(y\log\hat{y} + \left(1-y\right)\log\left(1-\hat{y}\right)\right)
 \]</span> 我们先来看一下前面的抛硬币的例子。在这个例子里面，我们已经知道了抛硬币的结果，求原本的硬币概率是多少。如果把抛硬币的例子和神经网络对应起来的话，抛硬币的结果对应的就是已经有的数据集<span class="math inline">\(\left&lt;x_i,\,y_i\right&gt;\)</span>，求硬币的概率<span class="math inline">\(\theta\)</span>对应到神经网络里面就是求所有的参数<span class="math inline">\(W,\,b\)</span>。</p>
 <p>有了这个对应之后，我们就比较容易思考了，于是就有如下：</p>
-<figure>
-<img src="https://i0.hdslb.com/bfs/article/2eddf21423ed4fc545d7a150c5e507473c817487.jpg@942w_531h_progressive.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://s2.loli.net/2022/02/15/EiGltnaHBCNz5pg.jpg" srcset="/img/loading.gif" lazyload></p>
 <p>经过上面的整理之后，就得到了似然函数的表达式了。我们的目标，也就是最接近真实规律的神经网络的参数<span class="math inline">\(\left(W,\,b\right)\)</span>，其实就是求上式在取得最大值时<span class="math inline">\(W,\,b\)</span>分别等于什么。</p>
 <p>(在求最大值的时候灰色部分是可以忽略的。特别是P(xi)，这是因为我们默认数据集是优质的数据集，数据集里的图片都是相互独立的，而且应该是等概率的。如果这部分有问题，那就需要重新整理数据集，让数据集尽可能满足这个条件。)</p>
-<figure>
-<img src="https://i0.hdslb.com/bfs/article/ae305c47cc4014af3104a0a4dabc3db2de9f4e1b.jpg@942w_531h_progressive.jpg" srcset="/img/loading.gif" lazyload alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="https://s2.loli.net/2022/02/15/bOhnN2xtA37XlGD.jpg" srcset="/img/loading.gif" lazyload></p>
 <p>通过上面的推导，就可以看出来了，为什么吴恩达老师的最大似然估计法的式子要写成那个样子了。</p>
 <h3 id="最小二乘法可以等价于最大似然估计法">“最小二乘法”可以等价于“最大似然估计法”</h3>
 <p>本来，讲到这里，最开始我们所有的问题就都已经解决了。不论是是最小二乘法，还是极大似然估计法，它们其实都是用来比较神经网络猜测的那个规律和真实的规律的方法。</p>
