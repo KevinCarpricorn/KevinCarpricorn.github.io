@@ -1,0 +1,754 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Kevin Zheng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="“最大似然估计”为什么又叫“交叉熵” 下面这个是吴恩达大佬在他的课程里面写出来的最大似然估计法的公式，\(y\)是标签值， \(\hat{y}\)是神经网络的估计值。 \[ \mathscr{L}\left(\hat{y}, y\right) &#x3D; -\left(y\log\hat{y} + \left(1-y\right)\log\left(1-\hat{y}\right)\right) \] 这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="交叉熵如何做损失函数？">
+<meta property="og:url" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/index.html">
+<meta property="og:site_name" content="Kevin的个人博客">
+<meta property="og:description" content="“最大似然估计”为什么又叫“交叉熵” 下面这个是吴恩达大佬在他的课程里面写出来的最大似然估计法的公式，\(y\)是标签值， \(\hat{y}\)是神经网络的估计值。 \[ \mathscr{L}\left(\hat{y}, y\right) &#x3D; -\left(y\log\hat{y} + \left(1-y\right)\log\left(1-\hat{y}\right)\right) \] 这">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/7899da57ce319f2ab072772dbac334df69f1dbdb.png@942w_680h_progressive.png">
+<meta property="og:image" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/b84943df5cf47c4a1957bdb1459303aaf6b02a27.png@942w_615h_progressive.png">
+<meta property="og:image" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/5da5016d8b883f7da6081355f55aae59672fb976.png@942w_290h_progressive.png">
+<meta property="og:image" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/5262bdbc97fbc0edff46ddd34754fc26620a5000.png@942w_414h_progressive.png">
+<meta property="og:image" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/e577e8cd24c9aafa024487ae7d1fe1084141838e.png@942w_497h_progressive.png">
+<meta property="og:image" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/b14c7987fc718bb8641a09c0821e876d7b7879ba.png@942w_480h_progressive.png">
+<meta property="og:image" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/166b97f632272d046a9d62720bf536756e4bac6b.png@942w_363h_progressive.png">
+<meta property="og:image" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/65ad9077e81ac853dc82efa4470f3fd0f9b583a4.png@942w_198h_progressive.png">
+<meta property="og:image" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/4ac700e2f47237fc391422f788cbd2b5075fe19f.png@942w_261h_progressive.png">
+<meta property="og:image" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/5d5e5b42dfab7438fbdd16ec58eabb3a686c6941.png@942w_359h_progressive.png">
+<meta property="og:image" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/ab41c87fe55a68afff093d5a24e6ffaeeb5fef22.png@942w_144h_progressive.png">
+<meta property="og:image" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/704b2dc51a6681951fb2f5d1bfc1dfa73d0e4534.png@942w_279h_progressive.png">
+<meta property="og:image" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/ddb7708dfaf12ffcd1570e4b5f273a4687845fe6.png@942w_135h_progressive.png">
+<meta property="og:image" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/1125e2d70ade5d39f2d5fe7ec93775dadff5b41a.png@942w_207h_progressive.png">
+<meta property="og:image" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/fb6a922a72973f7dd35146c4960c9efcf70c1e4b.png@942w_224h_progressive.png">
+<meta property="og:image" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/6fb867e1e224e8c75043c45e99a4b3dfb632d8dc.png@942w_362h_progressive.png">
+<meta property="og:image" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/e88a8a33291cc7949a5f25cb202b1849b285c61a.png@942w_389h_progressive.png">
+<meta property="og:image" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/c0858206816dd5da24c49d42d955b6b42a72bbf9.png@942w_186h_progressive.png">
+<meta property="article:published_time" content="2022-02-15T07:33:05.000Z">
+<meta property="article:modified_time" content="2022-02-15T10:00:05.122Z">
+<meta property="article:author" content="Kevin Zheng">
+<meta property="article:tag" content="人工智能">
+<meta property="article:tag" content="熵">
+<meta property="article:tag" content="信息量">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="神经网络">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="损失函数">
+<meta property="article:tag" content="交叉熵">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2022/02/15/%E4%BA%A4%E5%8F%89%E7%86%B5/7899da57ce319f2ab072772dbac334df69f1dbdb.png@942w_680h_progressive.png">
+  
+  
+  <title>交叉熵如何做损失函数？ - Kevin的个人博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Kevin的个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="交叉熵如何做损失函数？">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      Kevin Zheng
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-15 15:33" pubdate>
+        2022年2月15日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      11k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      90 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">交叉熵如何做损失函数？</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：1 分钟前
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h3 id="最大似然估计为什么又叫交叉熵">“最大似然估计”为什么又叫“交叉熵”</h3>
+<p>下面这个是吴恩达大佬在他的课程里面写出来的最大似然估计法的公式，<span class="math inline">\(y\)</span>是标签值， <span class="math inline">\(\hat{y}\)</span>是神经网络的估计值。 <span class="math display">\[
+\mathscr{L}\left(\hat{y}, y\right) = -\left(y\log\hat{y} + \left(1-y\right)\log\left(1-\hat{y}\right)\right)
+\]</span> 这个的确是用最大似然估计法写出来的损失函数，但是，只要你对损失函数有了解，就可能见到过，同样的这个公式也叫<strong>交叉熵</strong>，或者说是<strong>最小交叉熵方法</strong>。</p>
+<p>这就是有疑问的地方了，同样一个东西，为什么既可以叫这个名字，又可以叫那个名字。如果，两个名字相似也就算了，<strong>关键是“最大似然估计”和“交叉熵”两个没有丝毫相似的地方，为什么可以表示同一种东西呢</strong>？</p>
+<p>这就需要搞明白交叉熵到底是什么东西了，等把它搞明白之后，你就会明白，交叉熵和最大似然估计，虽然它们设计损失函数的思路不同，但是它们却是殊途同归，本质上是相同的。</p>
+<p>本章将会了解以下内容：</p>
+<ol type="1">
+<li>如何比较两个不同的概率分布？</li>
+<li>什么是信息量？信息量是如何定义出来的？</li>
+<li>什么是熵？</li>
+<li>什么是KL散度（相对熵）和交叉熵？</li>
+<li>用交叉熵如何设计损失函数？真的和最大似然估计法没有区别吗？</li>
+</ol>
+<h3 id="熵可以让不同的类型的概率分布实现公度">熵可以让不同的类型的概率分布实现公度</h3>
+<p>还是拿分类问题来举例，给了一堆猫狗的照片要把它们正确的分开，猫狗的区别这是有一个客观的规律的。我们上一次也讲过了，这个客观的规律，我们可以用函数来表示，也可以概率分布来表示。</p>
+<p>假如说，这个真实的规律我们可以用<span class="math inline">\(P\left(y,\,x\,|\,\text{真实规律}\right)\)</span>来表示，其中<span class="math inline">\(y\)</span>判断结果，<span class="math inline">\(x\)</span>是输入的图片，如果以真实规律作为条件，那么输入的图片一定能准确地判断出是猫还是狗。那机器学习呢？其实就是在计算机里面尽可能没有差别地把这个<span class="math inline">\(P\left(y,\,x\,|\,\text{真实规律}\right)\)</span>概率分布学出来。</p>
+<p>这里就出现一个关键问题了，假如说机器学习算法做出了一个猜测，<span class="math inline">\(P\left(y,\,x\,|\,\text{真实规律}\right)\)</span>。我们应该如何判断，这个猜测出来的概率分布与表示真实规律的概率分布是不是一样的？</p>
+<p>其实不只是是判断出来“一样”还是“不一样”就可以了，还需要知道它们之间的差距有多大，这样才能帮助机器学习的算法调整和修改，越来越接近真实规律。</p>
+<p>那么如何才能对两个概率分布做出比较呢？</p>
+<p>如果是同一类的概率分布的话，那还好办。比如说，都是正态分布，影响分布的参数就两个，一个均值一个方差。只需要判断真实规律和猜测规律里面这两个参数是不是一样，不一样的话看看参数差了多少，就行了。</p>
+<p>但真实的情况却不是这么简单，真实规律表现出来是什么样子的，我们根本不知道，别说我们根本无法确定真实规律那个概率分布到底是什么类型的，就算是确定了，决定它的参数也可能有很多，无法进行简单地比较。</p>
+<p>于是，比较两个概率分布的最大障碍出现了。<strong>两个不同类型的概率分布，它们无法直接公度</strong>。</p>
+<p>那怎么办呢？有什么方法可以让无法公度的两个概率分布，变得可以公度吗？</p>
+<p>这件事上，虽然不能一下子想到解决方法，但是说到公度的话，我们的世界里有一个特别伟大的系统，通过它可以让许多本来无法公度的事情变得可以公度，这或许可以给我们带来启发。</p>
+<p>这个系统就是货币系统，它让许多无法公度的事情，都可以变成一个价格数字，通过价格就能进行比较了。</p>
+<p>就比如，一个房子，你家里的老房子，在里面有几代人的记忆，对于你来说这个房子是价值很大的。但是，对于买房的人来说，这并没有什么特殊的，他心中这个房子的价值一定不如你。这本来是一个无法公度的事情，因为你们选择的根本就是不同的价值体系。</p>
+<p>不过没有关系，只要把房子放到货币体系里面，货币体系就可以完成对这个房子价值的评估，在你和买房人之间寻找到一个价值平衡点。</p>
+<p>虽然价格体系的运行方式很复杂，但是有一点是能给我们启发的，那就是不论是什么东西，它都可以把它们换成一串数字，变成数字之和就可以进行公度了。</p>
+<p>那么不同类型的概率分布，它们是不是也可以有类似的方法，先把它们转换成一串数字，将这个数字作为他们进行公度的代表。</p>
+<p>还真有，这个<strong>概率分布的“货币体系”就是熵</strong>。</p>
+<p>所有的概率分布，都可以统一地被转换成熵，比较两个概率分布是不是相同，不同的话，它们之间又相差多少，都可以用熵来进行衡量了。</p>
+<p>那到底是什么是熵呢？在了解它之前，我们还需要了解一个前置概率，信息量。</p>
+<h3 id="信息量是什么">信息量是什么</h3>
+<p>信息量这个词我们还是比较熟悉的，在日常口语中我们就在使用，假如说你看新闻刷到一个惊天大瓜，你可能就会感叹说这个新闻的信息量太足了。</p>
+<p>什么是信息？一条信息的功能就是让你从“不知道”变得“知道”，信息量肯定就是对信息的这个功能进行的度量了。可是，如果信息的使命就是让“不知道”变成“知道”，也就是说这是一个“是否”的二值问题，那信息也就没有度量的必要了，反正就两种情况。</p>
+<p>关键是，一条信息不是“知道”和“不知道”非此即彼的，它还能让你既不是完全不知道，又不是完全知道。如果是这样的话，那对信息进行度量就有意义了，就是去度量一下这个“知道”的程度。</p>
+<p>这种既不是完全不知道，又不是完全知道的状态还真有，举个例子。假如说有8只球队参加世界杯，有这样两种情况：</p>
+<ol type="1">
+<li>如果你什么消息都没有听说，有人问你阿根廷夺冠没有啊，你回答说不知道。</li>
+<li>随后，你看到一个消息，说阿根廷已经进决赛了，这个时候再问你阿根廷夺冠没有啊，你还是说不知道。</li>
+</ol>
+<p><img src="./7899da57ce319f2ab072772dbac334df69f1dbdb.png@942w_680h_progressive.png" srcset="/img/loading.gif" lazyload /></p>
+<p>虽然两种情况，你对阿根廷是否夺冠回答的都是不知道，但是这里的“不知道”和“不知道”还是很不一样的。<span class="math inline">\(a\)</span>情况的不知道，因为还没有比赛所以阿根廷夺冠的概率是<span class="math inline">\(\frac{1}{8}\)</span>，b情况阿根廷已经进到决赛了，虽然还没有最终夺冠，但是夺冠的确定性已大大增加，已经达到了<span class="math inline">\(\frac{1}{2}\)</span>。</p>
+<p>所以说，“阿根廷进决赛”这个消息，让你对阿根廷夺冠这个事件，从完全不知道，到有些知道了。也就是说，这个消息它应该是有信息量的。</p>
+<p>从前面这个例子，我们也能看出来对于阿根廷夺冠这件事，不同的消息含有的信息量很可能是不同的。</p>
+<p>如果我和你说，我今天中午多吃了一个包子，这虽然也是个消息，但是这个消息对于阿根廷夺冠来说信息量就<span class="math inline">\(0\)</span>。</p>
+<p>总结一下的话，其实我们应该有这一个感觉了，定性上来说，信息量它应该是，某个消息对“某个事件的确定程度改变了多少”进行的衡量。而确定性改变了多少，其实也就是前面说的那个概率的改变，阿根廷夺冠从原来的<span class="math inline">\(\frac{1}{8}\)</span>变成了<span class="math inline">\(\frac{1}{2}\)</span>。</p>
+<p>但是定量上来说，信息量到底是多少呢？难道就是凭着直觉，简单地用<span class="math inline">\(\frac{1}{2}\)</span>减去<span class="math inline">\(\frac{1}{8}\)</span>，用这个差值去定义信息量吗？ 没有这么简单。</p>
+<h3 id="信息量的良定义">信息量的良定义</h3>
+<p>要想对信息量给出一个良定义，不能产生自我矛盾，就需要考虑一下不同情况中，我们对信息量的理解是什么样的。</p>
+<p>就比如，我们可以看这样一种情况。</p>
+<p><img src="./b84943df5cf47c4a1957bdb1459303aaf6b02a27.png@942w_615h_progressive.png" srcset="/img/loading.gif" lazyload /></p>
+<p>这里的3个箭头代表着3个消息，绿色消息是阿根廷进入了决赛，蓝色消息则是阿根廷直接夺得冠军，这两个消息的起点都是一样的，都是在你不知道任何比赛结果的时候听到的消息。</p>
+<p>而橙色消息，它则是依赖于绿色消息的，它代表的是，在你知道阿根廷进决赛之后，又赢得决赛夺得冠军。</p>
+<p>如果我们想要信息量来衡量3个消息，那么我们可以看出信息量应该满足下面等式：</p>
+<ul>
+<li>$信息量(蓝色消息)=信息量(绿色消息)+信息量(橙色消息) $</li>
+</ul>
+<p>一个消息的信息量具体是多少，虽然我们现在还不知道，但是我们可以确定，这个信息量应该是和对应事件发生的概率有关。于是我们就可以拿这个概率作为变量，那计算信息量这个函数应该如下：</p>
+<ul>
+<li><span class="math inline">\(信息量(\frac{1}{8})=信息量(\frac{1}{4})+信息量(\frac{1}{2})\)</span> —— ①</li>
+</ul>
+<p>到这里其实还没有完，因为函数里的变量是概率，根据条件概率的性质，我们知道这里还隐含着一个条件，那就是：</p>
+<ul>
+<li><span class="math inline">\(P(夺冠)=P(夺冠|进决赛)×P(进决赛)\)</span> —— ②</li>
+</ul>
+<p>把①和②一结合，我们就可以发现这样一个关系：</p>
+<ul>
+<li><span class="math inline">\(信息量(\frac{1}{4} × \frac{1}{2})=信息量(\frac{1}{4})+信息量(\frac{1}{2})\)</span></li>
+</ul>
+<p>仔细看一下这个式子就能发现，计算信息量的这个函数，如果想要自洽、想要是良定义的，那么它必须满足一个条件，那就是自变量的乘法等于函数值的加法。</p>
+<p>满足这样这样的函数应该是什么样子的？</p>
+<p>理论上来说，满足这个性质的函数应该是有千千万万的，但是其中最简单的应该就是对数运算log了。log对数运算是唯一满足这种关系的初等函数。</p>
+<p>到现在，我想大家心中都会有一个冲动，就是把信息量定义为： <span class="math display">\[
+\text{信息量}\left(P\left(X\right)\right) :=?log_?P\left(X\right)
+\]</span> 不论是说<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/奥卡姆剃刀原理/10900565?fr=aladdin">奥卡姆剃刀原理</a>，还是说人们本能的喜欢偷懒，这个用最简单的方式给出定义的冲动都特别正常。我想，当年香农给出信息量的定义的时候，也是这么想的。</p>
+<p>接下来需要确定的就是这个式子里的两个问号了，系数是多少？对数的底又是多少？</p>
+<p>一切都为了简单，不考虑别的话，系数应该就是<span class="math inline">\(1\)</span>了，只不过需要确定的是，到底是<span class="math inline">\(1\)</span>还是<span class="math inline">\(-1\)</span>。</p>
+<p>如果硬规定，系数就是1也行，只不过我们现在做的并不是完全凭空发明出信息量这个概念，如果是凭空创造出来的，那么发明人怎么定那我们就怎么用。我们现在面对的问题是，信息量这个概念，我们在日常生活中就在用，只不过定理的定义不是很清晰，我们现在做的其实是把这个定义换成更精确的数学方式表达出来，所以数学的定义不应该和我们的口语表达有冲突。</p>
+<p>所以到底是<span class="math inline">\(1\)</span>还是<span class="math inline">\(-1\)</span>，就需要看一下我们口语中，自变量（也就是那个概率值）越大函数值越大，还是自变量越小函数值越大了。</p>
+<p>还是看上面阿根廷夺冠的例子，绿色消息是阿根廷进入决赛，蓝色消息是阿根廷夺得冠军，一个发生的概率是1/4，一个发生的概率是1/8，单从概率的数值上来看的话，显然绿色消息值更大。但是这两个消息那个信息量更大呢？</p>
+<p>我们的感觉肯定是蓝色的消息信息量更大啊，绿色的消息只是让阿根廷夺冠这件事概率增加了，并没有完全确定，而蓝色消息却是给出了一个完全确定的结果，显然蓝色的消息带来的不确定程度的改变更剧烈，也就是带来的信息量更大。</p>
+<p>所以信息量，它的自变量和函数值应该是一个反比关系，也就是第一个问号，那个系数应该是<span class="math inline">\(-1\)</span>。 <span class="math display">\[
+\text{信息量}\left(P\left(X\right)\right) :=-log_?P\left(X\right)
+\]</span> 剩下没有确定的就是对数运算的底了，这里底到底取多少，其实已经不那么重要了，可以取<span class="math inline">\(e\)</span>为底，也可以取<span class="math inline">\(10\)</span>为底，还可以取<span class="math inline">\(2\)</span>为底。当然，现在我们习惯的方式用2为底，这样子计算出来的信息量单位是比特。</p>
+<p>取不同的底，其实就是信息量的单位不同，以<span class="math inline">\(e\)</span>为底的单位是纳特(nat)或者是nit，以<span class="math inline">\(10\)</span>为底的单位是哈特(Hart)或者是dit。</p>
+<p>其中比特我们最熟悉，这最早是由香农提出来的。而以<span class="math inline">\(10\)</span>为底的信息量，最早是1928年有拉尔夫·哈特利(Ralph Hartley)提出来的，后来图灵也用<span class="math inline">\(10\)</span>为底计算过信息量，只不过图灵把这样的信息量单位称为ban。</p>
+<p>这里值得注意的是，信息量是有单位的（也就是说信息量有量纲）。什么意思呢？这里用bit作为例子来说明一下。</p>
+<p>我们知道，说到单位，比如说米、千克，它们都是有一个基准尺度的，具体长度是多少、质量是多少，都是与这个基准尺度做比较得出来的。比如，曾经米的基准就是子午线的千万分之一，后来才改成用光速定义，公斤的基准尺度曾经是用放在法国的国际千克原器的质量，后来才改成用普朗克常数定义。</p>
+<p>既然信息量也是有单位的，那么这个bit单位的基准尺度是什么呢？</p>
+<p>其实bit就是用像抛硬币这种“<span class="math inline">\(50\%\)</span>正、<span class="math inline">\(50\%\)</span>反”的情况作为基准尺度的，其他的bit数值都是与这个基准尺度比较得到的。</p>
+<p><span class="math inline">\(\frac{1}{2}\)</span>概率的事件是<span class="math inline">\(1\)</span>bit，<span class="math inline">\(\frac{1}{4}\)</span>概率的事件是<span class="math inline">\(2\)</span>bit，这就是说这两个概率分别可以用<span class="math inline">\(1\)</span>个硬币和<span class="math inline">\(2\)</span>个硬币等价表示。至于<span class="math inline">\(\frac{1}{3}\)</span>的概率，对应的信息量是约等于<span class="math inline">\(1.58\)</span>bit。虽然我们现实中不可能是抛<span class="math inline">\(1.58\)</span>个硬币，但是数学上还是可以这样来表示出来的。</p>
+<p>这里再多说一下，在计算机里面，我们经常说<span class="math inline">\(8\)</span>bit、<span class="math inline">\(16\)</span>bit这些词，这些词不只表示一个信号里面含有的信息量，还用来表示存储空间的大小。</p>
+<p>这是为什么呢？</p>
+<p>举个例子，假如说计算机里面有一个<span class="math inline">\(16\)</span>bit的空间，这个空间里0、1、0、1到底是怎么排列组合的，是不确定的，任何一种情况的概率都是<span class="math inline">\(\frac{1}{2}^{16}\)</span>。当计算机接受到1个信息，这里的空间存储上了一个2进制数字（具体是什么数字无所谓），这里的可能性就从原来的<span class="math inline">\(\frac{1}{2}^{16}\)</span>概率变成了确定的<span class="math inline">\(1\)</span>，这个信息量是多少？就是<span class="math inline">\(16\)</span>bit啊。这个空间最多可以承载多少的信息量？就是<span class="math inline">\(16\)</span>bit了。</p>
+<p>于是存储空间的大小和信息量统一了，这也是bit又可以表示存储空间的原因。</p>
+<h3 id="熵是一个系统里信息量的期望值">熵是一个系统里信息量的期望值</h3>
+<p>对信息量了解之后，我们就可以来看熵了。</p>
+<p>熵这个概念，现在已经比较出圈了，本来一个学科里面很偏门的概念，现在在互联网圈子里面却人尽皆知。</p>
+<p>主要就是熵增这个概念太火了，它涉及到了整个宇宙的宿命，宇宙的未来就是在不可对抗的熵增过程中归于热寂。那熵到底是什么呢？在科普内容里面，很少有人把熵的定义公式拿出来讲的，都是说<strong>熵是对一个系统的混乱程度的度量</strong>。</p>
+<p>当初的先贤们是如何提出熵这个概念的，他们最初的想法是什么，我们很难还原了，不过我们现在还是可以对熵做逆向工程，试着来理解一下，前面说的系统的混乱程度到底是什么意思？为什么用信息量可以去描述系统的混乱程度？</p>
+<p>我们可以先来看这样一个问题，有两场比赛，假如说这两场比赛就是两个系统。</p>
+<p><img src="./5da5016d8b883f7da6081355f55aae59672fb976.png@942w_290h_progressive.png" srcset="/img/loading.gif" lazyload /></p>
+<p>一场比赛是比利时对战阿根廷（系统1），因为它们水平差不多，所以两队赢球的概率都是<span class="math inline">\(50\%\)</span>。另一场比赛是法国对中国（系统2），实力相差比较大，所以法国赢球的概率<span class="math inline">\(99\%\)</span>，中国赢球的概率是<span class="math inline">\(1\%\)</span>。</p>
+<p>请问，这两个系统那个的混乱程度更高？</p>
+<p>这个问题并不是靠直觉马上就能回答出来的，还是要琢磨一下。法国对中国，这个系统不出意外的话，肯定是法国赢，也就是最后的结果确定性更高。而比利时对阿根廷，这个就不能说意外不意外了，谁赢都有可能，所以最后结果是什么就很不确定。</p>
+<p>这里我是用不确定的程度来描述两场比赛的，其实这个不确定的程度也就是我们日常说的混乱程度，比利时和阿根廷比赛，因为结果特别不确定，所以很混乱。反过来说你，一个屋子很混乱，也就是你的袜子到底在哪里，非常不确定。</p>
+<p>既然和概率、不确定性搭上关系了，那么我们前面介绍的信息量就可以派上用场了。</p>
+<p>两次比赛，分别对应着两个可能的事件（系统1是“比利时赢”和“阿根廷赢”两个事件，系统2是“法国赢”和“中国赢”两个事件），它们对应的信息量计算结果出来如下：</p>
+<p><img src="./5262bdbc97fbc0edff46ddd34754fc26620a5000.png@942w_414h_progressive.png" srcset="/img/loading.gif" lazyload /></p>
+<p>比利时对阵阿根廷，不论谁获胜，信息量都是1bit。法国对阵中国，法国赢球的概率很高，所以他们赢球带来的信息量就很少，但是如果中国赢球了，那这个信息量就很大了，超过了6.6bit。</p>
+<p>这么看的话，系统1这个系统里两个事件的信息量加起来才是2bit，还没有中国赢球一个事件的信息量大，如果用信息量来表示熵，是不是就会有问题啊。明明系统1更不确定，但是计算出来却是系统1的信息量更少。</p>
+<p>别急，熵的确是“系统里面所有可能事件对应的信息量总和”，只不过不是把它们简单地加起来就行了，而是需要加权求和。这个权重是什么？就是这个事件发生的概率啊。</p>
+<p><img src="./e577e8cd24c9aafa024487ae7d1fe1084141838e.png@942w_497h_progressive.png" srcset="/img/loading.gif" lazyload /></p>
+<p>加上权重之后，就合理了，从上图就可以看出系统1得到的值的确是比系统2更大了。</p>
+<p>而且这个加上权重的动作也挺合理的，就比如说，中国队夺冠了这个事情如果发生了的话，信息量的确还挺大的，但是它得真发生了才行了，可事实呢，它只有1%的可能性发生，99%的可能性都是法国夺冠。</p>
+<p>所以，一个系统到底含有多少信息量，那还需要看具体一个事件对整个系统到底能贡献多少信息量才行。如果事件没发生，那就是没有贡献啊，就不能放在总和里面。越是一个事件贡献了多少信息量，就可以理解成信息量乘上对应事件发生的概率。</p>
+<p>那熵到底是什么？这个问题就简单了，熵就是所有事件对应的信息量的加权和，那这个加权和是什么？就是这个系统里面信息量的期望值啊。</p>
+<p>那么我们就可以<strong>对熵做出如下定义</strong>了，其中<span class="math inline">\(H\left(S\right)\)</span>表示<span class="math inline">\(S\)</span>系统的熵，<span class="math inline">\(E\)</span>是求期望，<span class="math inline">\(I(X)\)</span>是求信息量，<span class="math inline">\(P\left(x_i\right)\)</span>表示<span class="math inline">\(x_i\)</span>事件的概率。</p>
+<p><img src="./b14c7987fc718bb8641a09c0821e876d7b7879ba.png@942w_480h_progressive.png" srcset="/img/loading.gif" lazyload /></p>
+<p>现在我们已经知道熵到底是什么了。我们最开始的目的是什么？是比较两个概率分布，一个表示真实的规律，一个表示机器学习猜测的规律，看看两个概率分布它们相差有多少。</p>
+<p>现在有了熵，我们是不是就可以直接比较两个概率分布的差距了呢？把两个概率分布的熵都算出来，然后看看相差多少。</p>
+<p>哪有这么简单，别忘了，真实规律我们是不知道的，既然不知道，那它的熵还怎么求呢？没有办法。</p>
+<p>那么有没有什么方法，即便不知道一个概率分布的熵具体是多少，也能知道两个概率分布之间的差距是多少呢？ 有！这就是KL散度和交叉熵了。</p>
+<h3 id="kl散度相对熵和交叉熵">KL散度（相对熵）和交叉熵</h3>
+<p>假如说，下面这个图表示的是两个系统的概率分布，其中系统<span class="math inline">\(S\)</span>代表的是真实的规律，系统<span class="math inline">\(O\)</span>代表的是机器学习模型里面猜测的那个规律。</p>
+<p><img src="./166b97f632272d046a9d62720bf536756e4bac6b.png@942w_363h_progressive.png" srcset="/img/loading.gif" lazyload /></p>
+<p>这两个系统的概率分布如果是相同的话，那么毫无疑问，两个系统的熵也一定是相等的，而且我还能大概确定，两个系统越像，熵应该是越接近的。</p>
+<p>不过，这个事情不能反过来想，两个系统的熵相同，两个系统的概率分布就一定相同吗？好像并没有这么简单，因为简单的一个数字，维度太少了。一张200元的高铁票和一件200元的衣服，它们价格相同，但是这两个东西却是天差地别。</p>
+<p>所以，看两个系统是不是相同，不能是直接比较两个系统的熵，这会太简单粗暴。那怎么办呢？这个时候就需要KL散度这个概念了。</p>
+<p>KL散度就不是粗暴的比较一个总体的熵了，而是比较得更细致，每一个事件<span class="math inline">\(x_i\)</span>对应的信息量，都会拿来进行比较。如果每一个事件的信息量都是相同的，那么两个概率分布肯定就是相同的了。</p>
+<p>于是KL散度就可以做出如下定义：</p>
+<p><img src="./65ad9077e81ac853dc82efa4470f3fd0f9b583a4.png@942w_198h_progressive.png" srcset="/img/loading.gif" lazyload /></p>
+<p>可以注意到，这个定义本质上也是一个加权求和，求和的是两个系统中同一个事件的信息量的差值，加的那个权重是其中一个系统里这个事件的概率值。从这里也能看出来，这里的系统<span class="math inline">\(S\)</span>和系统<span class="math inline">\(O\)</span>，它们并不是平等的，把<span class="math inline">\(S\)</span>和<span class="math inline">\(O\)</span>交换之后并不能保证得到相同的值。 <span class="math display">\[
+D_{KL}\left(S\,\|\,O\right)\neq D_{KL}\left(O\,\|\,S\right)
+\]</span> 也就是说，KL散度它相当于会在两个系统中挑选了一个作为基准（我这里用的是<span class="math inline">\(S\)</span>系统作为基准），拿另一个系统与这个基准进行比较。因为这是用<span class="math inline">\(S\)</span>系统的熵作为基准，去衡量另一个系<span class="math inline">\(O\)</span>的熵，所以KL散度也叫相对熵。</p>
+<p>当KL散度给出来之后，用熵直接比较太简单粗暴的问题给解决了，但是这个东西我们应该怎么用呢？直接看KL散度的定义的话，还是很难想到怎么用的，不过只需要对KL散度的定义变变形，这个问题就会变得简单了。</p>
+<p><img src="./4ac700e2f47237fc391422f788cbd2b5075fe19f.png@942w_261h_progressive.png" srcset="/img/loading.gif" lazyload /></p>
+<p>经过变形之后我们就能发现，KL散度可以被分成两个部分，其中后面的那个部分计算出来就是系统<span class="math inline">\(S\)</span>的熵，这部分算出来是多少是与系统<span class="math inline">\(O\)</span>无关的。所以，真正决定KL散度的其实是前面那部分，它的大小决定着KL散度的大小。</p>
+<p>于是这部分就可以被单独拿出来讨论，所以<strong>它就被定义成为了交叉熵</strong>。想知道系统<span class="math inline">\(S\)</span>和系统<span class="math inline">\(O\)</span>是否一样，不需要去计算它们的KL散度，只需要去看它们的交叉熵。</p>
+<p>我们的目标是什么，是希望机器学习模型中猜测出来的那个概率分布<span class="math inline">\(O\)</span>，与真实的概率分布<span class="math inline">\(S\)</span>接近。这个接近如果用KL散度来表示的话，就是KL散度要尽可能地接近数值0，正值太大、负值太小都不行。</p>
+<p>那如果我们的目标不用KL散度来表示，而是用交叉熵来表示，应该是什么样子的呢？如果直接看前面推导出的那个式子，我们可以看到，我们的目标可以表示成交叉熵的值与系统<span class="math inline">\(S\)</span>的熵最接近时，目标达成。</p>
+<p>但是这里也就有问题了，这代表着如何能找到最合适的交叉熵，要分两种情况来考虑：</p>
+<ul>
+<li>当交叉熵的值大于系统<span class="math inline">\(S\)</span>的熵时，我们的目标是寻找交叉熵最小的值</li>
+<li>当交叉熵的值小于系统<span class="math inline">\(S\)</span>的熵时，我们的目标是寻找交叉熵最大的值</li>
+</ul>
+<p>这个时候，我们一般都会不禁地想，如果只有一种情况该多好啊，这样问题就简单了，我们寻找最接近系统<span class="math inline">\(S\)</span>的系统<span class="math inline">\(O\)</span>，就变成一个对交叉熵求最值的问题了，如果是第一种情况就是求最小值，如果是第二种情况就是求最大值。</p>
+<p>我想数学家们也和我们有同样的想法，所以他们真的从数学上证明了，不需要两种情况都考虑，只需要考虑第一种情况。</p>
+<p>这是因为，从数学上就可以证明，交叉熵的值一定是会大于等于系统<span class="math inline">\(S\)</span>的熵的。所以，只需要考虑如何对交叉熵求最小值就行了。一个系统与系统<span class="math inline">\(S\)</span>的交叉熵最小值，那么这个系统与S最接近。</p>
+<p>这个证明过程就不写了，感兴趣的话，大家可以自己去了解一下<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/吉布斯不等式">吉布斯不等式</a>。（重点关注一下条件，概率值<span class="math inline">\(p_i\)</span>和<span class="math inline">\(q_i\)</span>是归一的，后面要用到）</p>
+<p>至此，我们终于了解交叉熵到底是怎么来的，以及为什么交叉熵最小的时候，两个概率分布最接近。</p>
+<p>但是，这个概念是如何应用到神经网络里面的？它对应的损失函数应该如何设计？为什么求交叉熵最小的方法，又可以被称为最大似然估计法？</p>
+<h3 id="最小交叉熵和最大似然估计两种损失函数等价">“最小交叉熵”和“最大似然估计”两种损失函数等价</h3>
+<p>要想把交叉熵这个概念应用到神经网络里面，那我们首先需要做的是把神经网络变成一个概率问题。假设说这是一个判断是猫是狗的二分问题，那么真实规律和神经网络猜测的规律，可以用下面两个概率分布来进行表示。</p>
+<p>其中随机变量<span class="math inline">\(z\)</span>，表示这个规律对图片的判断结果。</p>
+<p><img src="./5d5e5b42dfab7438fbdd16ec58eabb3a686c6941.png@942w_359h_progressive.png" srcset="/img/loading.gif" lazyload /></p>
+<p>于是，交叉熵就可以写成如下形式，（因为是归一的，所以可以用<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/吉布斯不等式">吉布斯不等式</a>，也就是KL散度可以转化成交叉熵问题）：</p>
+<p><img src="./ab41c87fe55a68afff093d5a24e6ffaeeb5fef22.png@942w_144h_progressive.png" srcset="/img/loading.gif" lazyload /></p>
+<p>不过，只是这样的话，我们是没有办法计算交叉熵的，因为我们并不清楚<span class="math inline">\(P\left(z_i,\,x_i\,|\,\text{真实规律}\right)\)</span>和<span class="math inline">\(P\left(z_i,\,x_i\,|\,\text{猜测规律}\right)\)</span>的概率分布</p>
+<p>我们知道是什么？</p>
+<p>是<span class="math inline">\(P\left(z_i,\,x_i\,|\,\text{真实规律}\right)\)</span>和<span class="math inline">\(P\left(z_i,\,x_i\,|\,\text{猜测规律}\right)\)</span>的概率，这里不一样的是<span class="math inline">\(x_i\)</span>的位置，<span class="math inline">\(x_i\)</span>也就是输入的数据、猫狗的图片从原来的随机变量，变成了条件。</p>
+<p>然后我们就可以得到下图的关系。其中<span class="math inline">\(\hat{y}\)</span>表示神经网络在输入图片后的计算结果，因为<span class="math inline">\(\hat{y}\)</span>经常是经过sigmoid计算后的结果，所以可以直接看做是一个概率值。</p>
+<p><img src="./704b2dc51a6681951fb2f5d1bfc1dfa73d0e4534.png@942w_279h_progressive.png" srcset="/img/loading.gif" lazyload /></p>
+<p>从<span class="math inline">\(P\left(z_i,\,x_i\,|\,\text{真实规律}\right)\)</span>，到<span class="math inline">\(P\left(z_i\,|\,x_i,\,\text{真实规律}\right)\)</span>，我们知道中间差了一个<span class="math inline">\(P(x_i)\)</span> <span class="math display">\[
+P\left(z_i,\,x_i\,|\,真实规律\right)=P\left(z_i\,|\,x_i,\,真实规律\right)\cross P\left(x_i\right)
+\]</span> 于是交叉熵就可以写成下面的样子：</p>
+<p><img src="./ddb7708dfaf12ffcd1570e4b5f273a4687845fe6.png@942w_135h_progressive.png" srcset="/img/loading.gif" lazyload /></p>
+<p>这里的<span class="math inline">\(P(x_i)\)</span>其实代表的就是，这个训练用的图片是按照什么概率从茫茫多的图片中抽样出来的。这个值我们并不清楚，不过训练集的图片我们基本上也就是认为它们是被随机挑选出来的，也就是说不同图片的概率应该都是相同的。于是P(xi)就可以看做是一个常数。</p>
+<p>又因为我们希望求的是在交叉熵取最小值时的“猜测规律”的情况，所以当<span class="math inline">\(P(x_i)\)</span>是常数的时候，对最后的结果是不会有影响的。</p>
+<p>也就是说：</p>
+<p><img src="./1125e2d70ade5d39f2d5fe7ec93775dadff5b41a.png@942w_207h_progressive.png" srcset="/img/loading.gif" lazyload /></p>
+<p><img src="./fb6a922a72973f7dd35146c4960c9efcf70c1e4b.png@942w_224h_progressive.png" srcset="/img/loading.gif" lazyload /></p>
+<p>当然，我们更习惯的用法，其实是将猫狗用<span class="math inline">\(1\)</span>和<span class="math inline">\(0\)</span>来表示，如果说用<span class="math inline">\(1\)</span>表示是猫，<span class="math inline">\(0\)</span>表示是狗，那么<span class="math inline">\(y\)</span>作为图片的标签值有：猫的标签值<span class="math inline">\(y=1\)</span>，狗的标签值<span class="math inline">\(y=0\)</span>。于是前面的那个概率关系就可以变成如下的样子：</p>
+<p><img src="./6fb867e1e224e8c75043c45e99a4b3dfb632d8dc.png@942w_362h_progressive.png" srcset="/img/loading.gif" lazyload /></p>
+<p>然后我们再对上面几种情况归纳整理一下，就可以得出最小交叉熵的最终表达形式了，其中<span class="math inline">\(i\in\left\{1,2,\cdots,n\right\}\)</span>，表示的是训练集图片有<span class="math inline">\(n\)</span>个，<span class="math inline">\(j\in\left\{1, 2\right\}\)</span>，表示这是一个二分类问题：</p>
+<p><img src="./e88a8a33291cc7949a5f25cb202b1849b285c61a.png@942w_389h_progressive.png" srcset="/img/loading.gif" lazyload /></p>
+<p><img src="./c0858206816dd5da24c49d42d955b6b42a72bbf9.png@942w_186h_progressive.png" srcset="/img/loading.gif" lazyload /></p>
+<p>到了这一步，是不是就非常眼熟了？我们可以再把最开始吴恩达老师课程里的那个损失函数表达式拿下来看一下： <span class="math display">\[
+\mathscr{L}\left(\hat{y}, y\right) = -\left(y\log\hat{y} + \left(1-y\right)\log\left(1-\hat{y}\right)\right)
+\]</span> 是不是一模一样的？吴恩达老师给出的是一个图片的计算公式，如果考虑的是把所有图片的交叉熵都计算出来，就是我写出来的样子了。也就是说，最小交叉熵和最大似然估计，它们殊途同归，本质上是等价的。</p>
+<p>当然，这里还有多提一下，从数学上来看，最小交叉熵和最大似然估计是等价的，但是硬要较真儿的话，两个方法在物理上还是不同的。因为，交叉熵是有量纲的，而似然值没有量纲，最大似然值最后之所以会出现log和负号，也只是为了计算的方法，本身并没有物理意义。交叉熵就不同了，它的log和负号，是让它有单位的关键。</p>
+<h3 id="references">References</h3>
+<p>https://www.bilibili.com/video/BV15V411W7VB?spm_id_from=333.999.0.0</p>
+<p>https://www.bilibili.com/read/cv15258489?spm_id_from=333.999.0.0</p>
+<p>https://baike.baidu.com/item/奥卡姆剃刀原理/10900565?fr=aladdin</p>
+<p>https://zh.wikipedia.org/wiki/吉布斯不等式</p>
+<hr />
+<p><strong><em>知识来源作者为b站UP主王木头学科学</em></strong></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%86%B5/">熵</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E4%BF%A1%E6%81%AF%E9%87%8F/">信息量</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">神经网络</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0/">损失函数</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E4%BA%A4%E5%8F%89%E7%86%B5/">交叉熵</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/13/%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0/">
+                        <span class="hidden-mobile">“损失函数”是如何设计出来的？直观理解“最小二乘法”和“极大似然估计法”</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script>
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          Fluid.utils.createCssLink('https://cdn.jsdelivr.net/npm/disqusjs@1/dist/disqusjs.css');
+          Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/disqusjs@1/dist/disqus.js', function() {
+            new DisqusJS({
+              shortname: 'test',
+              apikey: ''
+            });
+          });
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
