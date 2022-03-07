@@ -1,0 +1,742 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Kevin Zheng">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="作 者：韩 昊 知 乎：Heinrich 微 博：@花生油工人 知乎专栏：与时间无关的故事 谨以此文献给大连海事大学的吴楠老师，柳晓鸣老师，王新年老师以及张晶泊老师。  我保证这篇文章和你以前看过的所有文章都不同，这是12年还在果壳的时候写的，但是当时没有来得及写完就出国了……于是拖了两年，嗯，我是拖延症患者…… 这篇文章的核心思想就是： 要让读者在不看任何数学公式的情况下理解傅里叶分析。 傅里叶">
+<meta property="og:type" content="article">
+<meta property="og:title" content="傅立叶分析">
+<meta property="og:url" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/index.html">
+<meta property="og:site_name" content="Kevin的个人博客">
+<meta property="og:description" content="作 者：韩 昊 知 乎：Heinrich 微 博：@花生油工人 知乎专栏：与时间无关的故事 谨以此文献给大连海事大学的吴楠老师，柳晓鸣老师，王新年老师以及张晶泊老师。  我保证这篇文章和你以前看过的所有文章都不同，这是12年还在果壳的时候写的，但是当时没有来得及写完就出国了……于是拖了两年，嗯，我是拖延症患者…… 这篇文章的核心思想就是： 要让读者在不看任何数学公式的情况下理解傅里叶分析。 傅里叶">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/2ca39677363c65a305207a5491b75825_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/8e1fce9d7607d97cebf73e1f36f03f06_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/d4fa1de0327eb491a6941ac84a56e432_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/1ca366b593d877a16c8a49773774b5b9_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/055bf33bb84555a952804c5dbeb75dd9_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/563deb4a6599d052b3ba108661872c57_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/81ca9447d6c45c162c2d76df75a6690a_1440w.jpg">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/1/1a/Fourier_series_square_wave_circles_animation.gif">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/7/7e/Fourier_series_sawtooth_wave_circles_animation.gif">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/b/b2/Fourier_series_triangle_wave_circles_animation.gif?20140502233558">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/e2e3c0af3bdbcba721c5415a4c65da9e_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/19679c871bd33d94e2fc8b174f0d14ab_1440w.jpg">
+<meta property="og:image" content="http://example.com/Users/kevin/blogs/source/_posts/傅立叶分析（转载）/40cf849e55ed95732a60b52d4019d609_1440w.jpg">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/2/2b/Fourier_series_and_transform.gif">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/07199fc0250791d768771b50c098e26a_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/e1985fe86283a7b14d1fc7e11d322fcb_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/4695ce06197677bab880cd55b6846f12_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/419cd0b2e965aca25d5f8a5a6362d728_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/a185be412974fd73a7925cf1f1cc5372_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/ece53f825c6de629befba3de12f929a7_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/42e1f6dc43e8868b4962f5ba389a5df4_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/3e88e9463e4667e50ebdda51dee88358_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/974efc6a99e06dcd623193e960ccbe93_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/c2d7bfc819ebcbea8d6f2c8271d4791d_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/f116ae26859bdc80b28ea0f8f894ccc0_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/0fdfa0a9b6eea036703ab2499381080c_1440w.jpg">
+<meta property="og:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/097c9051af221c171730d4bc8f436a72_1440w.jpg">
+<meta property="article:published_time" content="2022-03-07T14:27:29.000Z">
+<meta property="article:modified_time" content="2022-03-07T16:13:49.306Z">
+<meta property="article:author" content="Kevin Zheng">
+<meta property="article:tag" content="数学">
+<meta property="article:tag" content="傅立叶">
+<meta property="article:tag" content="傅立叶分析">
+<meta property="article:tag" content="傅立叶级数">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/2022/03/07/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/2ca39677363c65a305207a5491b75825_1440w.jpg">
+  
+  
+  <title>傅立叶分析 - Kevin的个人博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":50,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Kevin的个人博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="傅立叶分析">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      Kevin Zheng
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-07 22:27" pubdate>
+        2022年3月7日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      7.4k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      62 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">傅立叶分析</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：4 分钟前
+                
+              </p>
+            
+            <div class="markdown-body">
+              <p>作 者：韩 昊</p>
+<p>知 乎：Heinrich</p>
+<p>微 博：<span class="citation" data-cites="花生油工人">@花生油工人</span></p>
+<p>知乎专栏：与时间无关的故事</p>
+<p>谨以此文献给大连海事大学的吴楠老师，柳晓鸣老师，王新年老师以及张晶泊老师。</p>
+<hr />
+<p>我保证这篇文章和你以前看过的所有文章都不同，这是12年还在果壳的时候写的，但是当时没有来得及写完就出国了……于是拖了两年，嗯，我是拖延症患者……</p>
+<p>这篇文章的核心思想就是：</p>
+<p><strong>要让读者在不看任何数学公式的情况下理解傅里叶分析。</strong></p>
+<p>傅里叶分析不仅仅是一个数学工具，更是一种可以彻底颠覆一个人以前世界观的思维模式。但不幸的是，傅里叶分析的公式看起来太复杂了，所以很多大一新生上来就懵圈并从此对它深恶痛绝。老实说，这么有意思的东西居然成了大学里的杀手课程，不得不归咎于编教材的人实在是太严肃了。（您把教材写得好玩一点会死吗？会死吗？）所以我一直想写一个有意思的文章来解释傅里叶分析，有可能的话高中生都能看懂的那种。所以，不管读到这里的您从事何种工作，我保证您都能看懂，并且一定将体会到通过傅里叶分析看到世界另一个样子时的快感。至于对于已经有一定基础的朋友，也希望不要看到会的地方就急忙往后翻，仔细读一定会有新的发现。</p>
+<hr />
+<p>下面进入正题：</p>
+<p>抱歉，还是要啰嗦一句：其实学习本来就不是易事，我写这篇文章的初衷也是希望大家学习起来更加轻松，充满乐趣。但是千万！千万不要把这篇文章收藏起来，或是存下地址，心里想着：以后有时间再看。这样的例子太多了，也许几年后你都没有再打开这个页面。无论如何，耐下心，读下去。这篇文章要比读课本要轻松、开心得多……</p>
+<p>p.s. 本文无论是<span class="math inline">\(\cos\)</span>还是<span class="math inline">\(\sin\)</span>，都统一用“正弦波”（Sine Wave）一词来代表<strong>简谐波</strong>。</p>
+<h2 id="一什么是频域">一、什么是频域</h2>
+<p>从我们出生，我们看到的世界都以时间贯穿，股票的走势、人的身高、汽车的轨迹都会随着时间发生改变。这种以时间作为参照来观察动态世界的方法我们称其为时域分析。而我们也想当然的认为，世间万物都在随着时间不停的改变，并且永远不会静止下来。但如果我告诉你，用另一种方法来观察世界的话，你会发现<u>世界是永恒不变的</u>，你会不会觉得我疯了？我没有疯，这个静止的世界就叫做频域。</p>
+<p>先举一个<strong>公式上并非很恰当</strong>，但意义上再贴切不过的例子：</p>
+<p>在你的理解中，一段音乐是什么呢？<img src="./2ca39677363c65a305207a5491b75825_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p>这是我们对音乐最普遍的理解，一个随着时间变化的震动。但我相信对于乐器小能手们来说，音乐更直观的理解是这样的：</p>
+<p><img src="./8e1fce9d7607d97cebf73e1f36f03f06_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p>好的！下课，同学们再见。</p>
+<p>是的，其实这一段写到这里已经可以结束了。上图是音乐在时域的样子，而下图则是音乐在频域的样子。所以频域这一概念对大家都从不陌生，只是从来没意识到而已。</p>
+<p>现在我们可以回过头来重新看看一开始那句痴人说梦般的话：世界是永恒的。</p>
+<p>将以上两图简化：</p>
+<p>时域：</p>
+<p><img src="./d4fa1de0327eb491a6941ac84a56e432_1440w.jpg" srcset="/img/loading.gif" lazyload alt="d4fa1de0327eb491a6941ac84a56e432_1440w" style="zoom:80%;" /></p>
+<p>频域：</p>
+<p><img src="./1ca366b593d877a16c8a49773774b5b9_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p>在时域，我们观察到钢琴的琴弦一会上一会下的摆动，就如同一支股票的走势；而在频域，只有那一个永恒的音符。</p>
+<p>所以</p>
+<p><strong>你眼中看似落叶纷飞变化无常的世界，实际只是躺在上帝怀中一份早已谱好的乐章。</strong></p>
+<p>抱歉，这不是一句鸡汤文，而是黑板上确凿的公式：傅里叶同学告诉我们，任何周期函数，都可以看作是不同振幅，不同相位正弦波的叠加。在第一个例子里我们可以理解为，利用对不同琴键不同力度，不同时间点的敲击，可以组合出任何一首乐曲。</p>
+<p>而贯穿时域与频域的方法之一，就是传中说的傅里叶分析。傅里叶分析可分为傅里叶级数（Fourier Serie）和傅里叶变换(Fourier Transformation)，我们从简单的开始谈起。</p>
+<h2 id="二傅里叶级数fourier-series的频谱">二、傅里叶级数(Fourier Series)的频谱</h2>
+<p>还是举个栗子并且有图有真相才好理解。</p>
+<p>如果我说我能用前面说的正弦曲线波叠加出一个带90度角的矩形波来，你会相信吗？你不会，就像当年的我一样。但是看看下图：</p>
+<p><img src="./055bf33bb84555a952804c5dbeb75dd9_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p>第一幅图是一个郁闷的正弦波<span class="math inline">\(\cos(x)\)</span></p>
+<p>第二幅图是2个卖萌的正弦波的叠加<span class="math inline">\(\cos(x) + a \cdot cos(3x)\)</span></p>
+<p>第三幅图是4个发春的正弦波的叠加</p>
+<p>第四幅图是10个便秘的正弦波的叠加</p>
+<p>随着正弦波数量逐渐的增长，他们最终会叠加成一个标准的矩形，大家从中体会到了什么道理？</p>
+<p>（只要努力，弯的都能掰直！）</p>
+<p>随着叠加的递增，所有正弦波中上升的部分逐渐让原本缓慢增加的曲线不断变陡，而所有正弦波中下降的部分又抵消了上升到最高处时继续上升的部分使其变为水平线。一个矩形就这么叠加而成了。但是要多少个正弦波叠加起来才能形成一个标准90度角的矩形波呢？不幸的告诉大家，答案是无穷多个。（上帝：我能让你们猜着我？）</p>
+<p>不仅仅是矩形，你能想到的任何波形都是可以如此方法用正弦波叠加起来的。这是没 有接触过傅里叶分析的人在直觉上的第一个难点，但是一旦接受了这样的设定，游戏就开始有意思起来了。</p>
+<p>还是上图的正弦波累加成矩形波，我们换一个角度来看看：</p>
+<p><img src="./563deb4a6599d052b3ba108661872c57_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p>在这几幅图中，最前面黑色的线就是所有正弦波叠加而成的总和，也就是越来越接近矩形波的那个图形。而后面依不同颜色排列而成的正弦波就是组合为矩形波的各个分量。这些正弦波按照频率从低到高从前向后排列开来，而每一个波的振幅都是不同的。一定有细心的读者发现了，每两个正弦波之间都还有一条直线，那并不是分割线，而是振幅为0的正弦波！也就是说，为了组成特殊的曲线，有些正弦波成分是不需要的。</p>
+<p>这里，不同频率的正弦波我们称为频率分量。</p>
+<p>好了，关键的地方来了！！</p>
+<p>如果我们把第一个频率最低的频率分量看作“1”，我们就有了构建频域的最基本单元。</p>
+<p>对于我们最常见的有理数轴，数字“1”就是有理数轴的基本单元。</p>
+<p>时域的基本单元就是“1秒”，如果我们将一个角频率为<span class="math inline">\(\omega_0\)</span>的正弦波<span class="math inline">\(\cos(\omega_0t)\)</span>看作基础，那么频域的基本单元就是<span class="math inline">\(\omega_0\)</span>。</p>
+<p>有了“1”，还要有“0”才能构成世界，那么频域的“0”是什么呢？cos（0t）就是一个周期无限长的正弦波，也就是一条直线！所以在频域，0频率也被称为直流分量，在傅里叶级数的叠加中，它仅仅影响全部波形相对于数轴整体向上或是向下而不改变波的形状。</p>
+<p>接下来，让我们回到初中，回忆一下已经死去的八戒，啊不，已经死去的老师是怎么定义正弦波的吧。</p>
+<p><img src="./81ca9447d6c45c162c2d76df75a6690a_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p>正弦波就是一个圆周运动在一条直线上的投影。所以频域的基本单元也可以理解为一个始终在旋转的圆</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Fourier_series_square_wave_circles_animation.gif" srcset="/img/loading.gif" lazyload /><img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Fourier_series_sawtooth_wave_circles_animation.gif" srcset="/img/loading.gif" lazyload /><img src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Fourier_series_triangle_wave_circles_animation.gif?20140502233558" srcset="/img/loading.gif" lazyload /></p>
+<p>介绍完了频域的基本组成单元，我们就可以看一看一个矩形波，在频域里的另一个模样了：</p>
+<p><img src="./e2e3c0af3bdbcba721c5415a4c65da9e_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p>这是什么奇怪的东西？</p>
+<p>这就是矩形波在频域的样子，是不是完全认不出来了？教科书一般就给到这里然后留给了读者无穷的遐想，以及无穷的吐槽，其实教科书只要补一张图就足够了：频域图像，也就是俗称的频谱，就是--------</p>
+<p><img src="./19679c871bd33d94e2fc8b174f0d14ab_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p>再清楚一点：</p>
+<figure>
+<img src="/Users/kevin/blogs/source/_posts/傅立叶分析（转载）/40cf849e55ed95732a60b52d4019d609_1440w.jpg" srcset="/img/loading.gif" lazyload alt="40cf849e55ed95732a60b52d4019d609_1440w" /><figcaption aria-hidden="true">40cf849e55ed95732a60b52d4019d609_1440w</figcaption>
+</figure>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/2/2b/Fourier_series_and_transform.gif" srcset="/img/loading.gif" lazyload /></p>
+<p>可以发现，在频谱中，偶数项的振幅都是0，也就对应了图中的彩色直线。振幅为0的正弦波。</p>
+<p>老实说，在我学傅里叶变换时，维基的这个动图还没有出现，那时我就想到了这种表达方法，而且，后面还会加入维基没有表示出来的另一个谱——相位谱。</p>
+<p>但是在讲相位谱之前，我们先回顾一下刚刚的这个例子究竟意味着什么。记得前面说过的那句“世界是静止的”吗？估计好多人对这句话都已经吐槽半天了。想象一下，世界上每一个看似混乱的表象，实际都是一条时间轴上不规则的曲线，但实际这些曲线都是由这些无穷无尽的正弦波组成。我们看似不规律的事情反而是规律的正弦波在时域上的投影，而正弦波又是一个旋转的圆在直线上的投影。那么你的脑海中会产生一个什么画面呢？</p>
+<p>我们眼中的世界就像皮影戏的大幕布，幕布的后面有无数的齿轮，大齿轮带动小齿轮，小齿轮再带动更小的。在最外面的小齿轮上有一个小人——那就是我们自己。我们只看到这个小人毫无规律的在幕布前表演，却无法预测他下一步会去哪。而幕布后面的齿轮却永远一直那样不停的旋转，永不停歇。这样说来有些宿命论的感觉。说实话，这种对人生的描绘是我一个朋友在我们都是高中生的时候感叹的，当时想想似懂非懂，直到有一天我学到了傅里叶级数……</p>
+<h2 id="三傅里叶级数fourier-series的相位谱">三、傅里叶级数（Fourier Series）的相位谱</h2>
+<p>上一章的关键词是：<strong>从侧面看</strong>。这一章的关键词是：<strong>从下面看</strong>。</p>
+<p>在这一章最开始，我想先回答很多人的一个问题：傅里叶分析究竟是干什么用的？这段相对比较枯燥，已经知道了的同学可以直接跳到下一个分割线。</p>
+<p>先说一个最直接的用途。无论听广播还是看电视，我们一定对一个词不陌生——频道。频道频道，就是频率的通道，不同的频道就是将不同的频率作为一个通道来进行信息传输。下面大家尝试一件事：</p>
+<p>先在纸上画一个<span class="math inline">\(\sin(x)\)</span>，不一定标准，意思差不多就行。不是很难吧。</p>
+<p>好，接下去画一个<span class="math inline">\(\sin(3x) + \sin(5x)\)</span>的图形。</p>
+<p>别说标准不标准了，曲线什么时候上升什么时候下降你都不一定画的对吧？</p>
+<p>好，画不出来不要紧，我把<span class="math inline">\(\sin(3x) + \sin(5x)\)</span>的曲线给你，但是前提是你不知道这个曲线的方程式，现在需要你把<span class="math inline">\(\sin(5x)\)</span>给我从图里拿出去，看看剩下的是什么。这基本是不可能做到的。</p>
+<p>但是在频域呢？则简单的很，无非就是几条竖线而已。</p>
+<p>所以很多在时域看似不可能做到的数学操作，在频域相反很容易。这就是需要傅里叶变换的地方。尤其是从某条曲线中去除一些特定的频率成分，这在工程上称为滤波，是信号处理最重要的概念之一，只有在频域才能轻松的做到。</p>
+<p>再说一个更重要，但是稍微复杂一点的用途——求解微分方程。（这段有点难度，看不懂的可以直接跳过这段）微分方程的重要性不用我过多介绍了。各行各业都用的到。但是求解微分方程却是一件相当麻烦的事情。因为除了要计算加减乘除，还要计算微分积分。而傅里叶变换则可以让微分和积分在频域中变为乘法和除法，大学数学瞬间变小学算术有没有。</p>
+<hr />
+<p>通过时域到频域的变换，我们得到了一个从侧面看的频谱，但是这个频谱并没有包含时域中全部的信息。因为频谱只代表每一个对应的正弦波的振幅是多少，而没有提到相位。基础的正弦波<span class="math inline">\(A\cdot \sin(\omega t + \theta)\)</span>中，振幅，频率，相位缺一不可，不同相位决定了波的位置，所以对于频域分析，仅仅有频谱（振幅谱）是不够的，我们还需要一个相位谱。那么这个相位谱在哪呢？我们看下图，这次为了避免图片太混论，我们用7个波叠加的图。</p>
+<p><img src="./07199fc0250791d768771b50c098e26a_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p>鉴于正弦波是周期的，我们需要设定一个用来标记正弦波位置的东西。在图中就是那些小红点。小红点是距离频率轴最近的波峰，而这个波峰所处的位置离频率轴有多远呢？为了看的更清楚，我们将红色的点投影到下平面，投影点我们用粉色点来表示。当然，这些粉色的点只标注了波峰距离频率轴的距离，并不是相位。</p>
+<p><img src="./e1985fe86283a7b14d1fc7e11d322fcb_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p>这里需要纠正一个概念：时间差并不是相位差。如果将全部周期看<span class="math inline">\(2\pi\)</span>或者<span class="math inline">\(360\)</span>度的话，相位差则是时间差在一个周期中所占的比例。我们将时间差除周期再乘<span class="math inline">\(2\pi\)</span>，就得到了相位差。</p>
+<p>在完整的立体图中，我们将投影得到的时间差依次除以所在频率的周期，就得到了最下面的相位谱。所以，频谱是从侧面看，相位谱是从下面看。</p>
+<p>注意到，相位谱中的相位除了<span class="math inline">\(0\)</span>，就是<span class="math inline">\(\pi\)</span>。因为<span class="math inline">\(\cos(t + \pi) = -\cos(t)\)</span>，所以实际上相位为<span class="math inline">\(\pi\)</span>的波只是上下翻转了而已。对于周期方波的傅里叶级数，这样的相位谱已经是很简单的了。另外值得注意的是，由于<span class="math inline">\(\cos(t + 2\pi) = \cos(t)\)</span>，所以相位差是周期的，<span class="math inline">\(\pi\)</span>和<span class="math inline">\(3\pi\)</span>，<span class="math inline">\(5\pi\)</span>，<span class="math inline">\(7\pi\)</span>都是相同的相位。人为定义相位谱的值域为<span class="math inline">\((-\pi, \pi]\)</span>，所以图中的相位差均为<span class="math inline">\(\pi\)</span>。</p>
+<p>最后来一张大集合：</p>
+<p><img src="./4695ce06197677bab880cd55b6846f12_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<h2 id="四傅里叶变换fourier-transformation">四、傅里叶变换（Fourier Transformation)</h2>
+<p>相信通过前面三章，大家对频域以及傅里叶级数都有了一个全新的认识。但是文章在一开始关于钢琴琴谱的例子我曾说过，这个栗子是一个公式错误，但是概念典型的例子。所谓的公式错误在哪里呢？</p>
+<p>傅里叶级数的本质是将一个周期的信号分解成无限多分开的（离散的）正弦波，但是宇宙似乎并不是周期的。曾经在学数字信号处理的时候写过一首打油诗：</p>
+<p><strong>往昔连续非周期</strong></p>
+<p><strong>回忆周期不连续</strong></p>
+<p><strong>任你ZT， DFT</strong></p>
+<p><strong>还原不回去。</strong></p>
+<p>（请无视我渣一样的文学水平……）</p>
+<p>在这个世界上，有的事情一期一会，永不再来，并且时间始终不曾停息地将那些刻骨铭心的往昔连续的标记在时间点上。但是这些事情往往又成为了我们格外宝贵的回忆，在我们大脑里隔一段时间就会周期性的蹦出来一下，可惜这些回忆都是零散的片段，往往只有最幸福的回忆，而平淡的回忆则逐渐被我们忘却。因为，往昔是一个连续的非周期信号，而回忆是一个周期离散信号。</p>
+<p>是否有一种数学工具将连续非周期信号变换为周期离散信号呢？抱歉，真没有。</p>
+<p>比如傅里叶级数，在时域是一个周期且连续的函数，而在频域是一个非周期离散的函数。这句话比较绕嘴，实在看着费事可以干脆回忆第一章的图片。</p>
+<p>而在我们接下去要讲的傅里叶变换，则是将一个时域非周期的连续信号，转换为一个在频域非周期的连续信号。</p>
+<p>算了，还是上一张图方便大家理解吧：</p>
+<p><img src="./419cd0b2e965aca25d5f8a5a6362d728_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p>或者我们也可以换一个角度理解：傅里叶变换实际上是对一个周期无限大的函数进行傅里叶变换。</p>
+<p>所以说，钢琴谱其实并非一个连续的频谱，而是很多在时间上离散的频率，但是这样的一个贴切的比喻真的是很难找出第二个来了。</p>
+<p>因此在傅里叶变换在频域上就从离散谱变成了连续谱。那么连续谱是什么样子呢？</p>
+<p><strong>你见过大海么？</strong></p>
+<p>为了方便大家对比，我们这次从另一个角度来看频谱，还是傅里叶级数中用到最多的那幅图，我们从频率较高的方向看。</p>
+<p><img src="./a185be412974fd73a7925cf1f1cc5372_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p>以上是离散谱，那么连续谱是什么样子呢？</p>
+<p>尽情的发挥你的想象，想象这些离散的正弦波离得越来越近，逐渐变得连续……</p>
+<p>直到变得像波涛起伏的大海：</p>
+<p><img src="./ece53f825c6de629befba3de12f929a7_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p>很抱歉，为了能让这些波浪更清晰的看到，我没有选用正确的计算参数，而是选择了一些让图片更美观的参数，不然这图看起来就像屎一样了。</p>
+<p>不过通过这样两幅图去比较，大家应该可以理解如何从离散谱变成了连续谱的了吧？原来离散谱的叠加，变成了连续谱的累积。所以在计算上也从求和符号变成了积分符号。</p>
+<p>不过，这个故事还没有讲完，接下去，我保证让你看到一幅比上图更美丽壮观的图片，但是这里需要介绍到一个数学工具才能然故事继续，这个工具就是----------</p>
+<h2 id="五宇宙耍帅第一公式欧拉公式">五、宇宙耍帅第一公式：欧拉公式</h2>
+<p>虚数i这个概念大家在高中就接触过，但那时我们只知道它是-1的平方根，可是它真正的意义是什么呢?</p>
+<p><img src="./42e1f6dc43e8868b4962f5ba389a5df4_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p>这里有一条数轴，在数轴上有一个红色的线段，它的长度是1。当它乘以3的时候，它的长度发生了变化，变成了蓝色的线段，而当它乘以-1的时候，就变成了绿色的线段，或者说线段在数轴上围绕原点旋转了180度。</p>
+<p>我们知道乘-1其实就是乘了两次 i使线段旋转了180度，那么乘一次 <span class="math inline">\(i\)</span> 呢——答案很简单——旋转了90度。</p>
+<p><img src="./3e88e9463e4667e50ebdda51dee88358_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p>同时，我们获得了一个垂直的虚数轴。实数轴与虚数轴共同构成了一个复数的平面，也称复平面。这样我们就了解到，乘虚数i的一个功能——旋转。</p>
+<p>现在，就有请宇宙第一耍帅公式欧拉公式隆重登场--------- <span class="math display">\[
+e^{ix} = \cos x + i \sin x
+\]</span> 这个公式在数学领域的意义要远大于傅里叶分析，但是称它为宇宙第一耍帅公式是因为它的特殊形式——当<span class="math inline">\(x\)</span>等于<span class="math inline">\(\pi\)</span>的时候。 <span class="math display">\[
+e^{i\pi}+1 = 0
+\]</span> 经常有理工科的学生为了跟妹子表现自己的学术功底，用这个公式来给妹子解释数学之美：”石榴姐你看，这个公式里既有自然底数<span class="math inline">\(e\)</span>，自然数<span class="math inline">\(1\)</span>和<span class="math inline">\(0\)</span>，虚数<span class="math inline">\(i\)</span>还有圆周率<span class="math inline">\(\pi\)</span>，它是这么简洁，这么美丽啊！“但是姑娘们心里往往只有一句话：”臭屌丝……“</p>
+<p>这个公式关键的作用，是将正弦波统一成了简单的指数形式。我们来看看图像上的涵义：</p>
+<p><img src="./974efc6a99e06dcd623193e960ccbe93_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p>欧拉公式所描绘的，是一个随着时间变化，在复平面上做圆周运动的点，随着时间的改变，在时间轴上就成了一条螺旋线。如果只看它的实数部分，也就是螺旋线在左侧的投影，就是一个最基础的余弦函数。而右侧的投影则是一个正弦函数。</p>
+<p>这里不需要讲的太复杂，足够让大家理解后面的内容就可以了。</p>
+<h2 id="六指数形式的傅里叶变换">六、指数形式的傅里叶变换</h2>
+<p>有了欧拉公式的帮助，我们便知道：<strong>正弦波的叠加</strong>，也可以理解为<strong>螺旋线的叠加</strong>在实数空间的投影。而螺旋线的叠加如果用一个形象的栗子来理解是什么呢？</p>
+<p><strong>光波</strong></p>
+<p>高中时我们就学过，自然光是由不同颜色的光叠加而成的，而最著名的实验就是牛顿师傅的三棱镜实验：</p>
+<p><img src="./c2d7bfc819ebcbea8d6f2c8271d4791d_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p>所以其实我们在很早就接触到了光的频谱，只是并没有了解频谱更重要的意义。</p>
+<p>但不同的是，傅里叶变换出来的频谱不仅仅是可见光这样频率范围有限的叠加，而是频率从0到无穷所有频率的组合。</p>
+<p>这里，我们可以用两种方法来理解正弦波：</p>
+<p>第一种前面已经讲过了，就是螺旋线在实轴的投影。</p>
+<p>另一种需要借助欧拉公式的另一种形式去理解： <span class="math display">\[
+e^{it} = \cos(t) + i\cdot \sin(t)\\
+e^{-it} = \cos(t) - i\cdot \sin(t)
+\]</span> 将以上两式相加再除2，得到： <span class="math display">\[
+\cos(t) = \frac{e^{it} + e^{-it}}{2}
+\]</span> 这个式子可以怎么理解呢？</p>
+<p>我们刚才讲过，<span class="math inline">\(e^{it}\)</span>可以理解为一条逆时针旋转的螺旋线，那么<span class="math inline">\(e^{-it}\)</span>则可以理解为一条顺时针旋转的螺旋线。而cos(t)则是这两条旋转方向不同的螺旋线叠加的一半，因为这两条螺旋线的虚数部分相互抵消掉了！</p>
+<p>举个例子的话，就是极化方向不同的两束光波，磁场抵消，电场加倍。</p>
+<p>这里，逆时针旋转的我们称为正频率，而顺时针旋转的我们称为负频率（注意不是复频率）。</p>
+<p>好了，刚才我们已经看到了大海——连续的傅里叶变换频谱，现在想一想，连续的螺旋线会是什么样子：</p>
+<p>想象一下再往下翻：</p>
+<div class="line-block"></div>
+<div class="line-block"></div>
+<div class="line-block"></div>
+<div class="line-block"></div>
+<div class="line-block"></div>
+<div class="line-block"></div>
+<div class="line-block"></div>
+<div class="line-block"></div>
+<div class="line-block"></div>
+<div class="line-block"></div>
+<div class="line-block"></div>
+<div class="line-block"></div>
+<div class="line-block"></div>
+<div class="line-block"></div>
+<div class="line-block"></div>
+<p><img src="./f116ae26859bdc80b28ea0f8f894ccc0_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p>是不是很漂亮？</p>
+<p>你猜猜，这个图形在时域是什么样子？</p>
+<p><img src="./0fdfa0a9b6eea036703ab2499381080c_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<p>哈哈，是不是觉得被狠狠扇了一个耳光。数学就是这么一个把简单的问题搞得很复杂的东西。</p>
+<p>顺便说一句，那个像大海螺一样的图，为了方便观看，我仅仅展示了其中正频率的部分，负频率的部分没有显示出来。</p>
+<p>如果你认真去看，海螺图上的每一条螺旋线都是可以清楚的看到的，每一条螺旋线都有着不同的振幅（旋转半径），频率（旋转周期）以及相位。而将所有螺旋线连成平面，就是这幅海螺图了。</p>
+<p>好了，讲到这里，相信大家对傅里叶变换以及傅里叶级数都有了一个形象的理解了，我们最后用一张图来总结一下:<img src="./097c9051af221c171730d4bc8f436a72_1440w.jpg" srcset="/img/loading.gif" lazyload /></p>
+<hr />
+<p>https://zhuanlan.zhihu.com/p/19763358</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%95%B0%E5%AD%A6/">数学</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%82%85%E7%AB%8B%E5%8F%B6/">傅立叶</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90/">傅立叶分析</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%82%85%E7%AB%8B%E5%8F%B6%E7%BA%A7%E6%95%B0/">傅立叶级数</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/19/softmax/">
+                        <span class="hidden-mobile">softmax</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div class="disqus" style="width:100%">
+    <div id="disqus_thread"></div>
+    
+      <script>
+        Fluid.utils.loadComments('#disqus_thread', function() {
+          Fluid.utils.createCssLink('https://cdn.jsdelivr.net/npm/disqusjs@1/dist/disqusjs.css');
+          Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/disqusjs@1/dist/disqus.js', function() {
+            new DisqusJS({
+              shortname: 'test',
+              apikey: ''
+            });
+          });
+        });
+      </script>
+    
+    <noscript>Please enable JavaScript to view the comments</noscript>
+  </div>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        loader: {
+          load: ['ui/lazy']
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
