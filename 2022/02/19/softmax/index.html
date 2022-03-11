@@ -40,7 +40,7 @@
 <meta property="og:image" content="http://example.com/2022/02/19/softmax/Screen%20Shot%202022-03-08%20at%207.26.31%20pm.jpg">
 <meta property="og:image" content="http://example.com/2022/02/19/softmax/Screen%20Shot%202022-03-08%20at%207.35.11%20pm.jpg">
 <meta property="article:published_time" content="2022-02-19T06:29:33.000Z">
-<meta property="article:modified_time" content="2022-03-08T11:57:42.572Z">
+<meta property="article:modified_time" content="2022-03-11T04:55:45.396Z">
 <meta property="article:author" content="Kevin Zheng">
 <meta property="article:tag" content="人工智能">
 <meta property="article:tag" content="数学">
@@ -275,7 +275,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：几秒前
+                  本文最后更新于：1 分钟前
                 
               </p>
             
@@ -304,9 +304,9 @@ sigmoid(z^{[l](k)}) = \frac{1}{1 + e^{-z^{[l](k)}}} = \frac{e^{z^{[l](k)}}}{e^{z
 <p><span class="math display">\[
 sigmoid(z^{[l](k)}) = \frac{t_1}{t_1+t_2} \, ;\, 1-sigmoid(z^{[l](k)}) = \frac{1}{t_1+t_2} = \frac{t_2}{t_1+t_2}
 \]</span></p>
-<p>那么他和有2个分类的softmax有什么区别了， 可能从结果来看他两并没有太大区别， 但是本质上他们是有很大区别的。 如果我们说sigmoid的分类一个是是猫的类别一个是不是猫的类别，那么softmax的结果表示的就是一个是猫的类别一个是狗的类别。</p>
+<p>那么他和有2个分类的softmax没有什么区别了， 可能从结果来看他两并没有太大区别， 但是本质上他们是有很大区别的。 如果我们说sigmoid的分类一个是是猫的类别一个是不是猫的类别，那么softmax的结果表示的就是一个是猫的类别一个是狗的类别。</p>
 <hr />
-<p>对于softmax我们本质上就是需要寻求一个归一化函数但归一化函数有那么多为什么softmax就选择了以<span class="math inline">\(e\)</span>为底的这种形式呢， 这其实就和最大熵有关了。 我们说神经网络是可以用来逼近任意一个概率模型即使这个概率模型我们写不出来也能逼近， 我们是使得似然值最大或者交叉熵最小。其实我们使用这种方法的默认前提是我们认为似然值最大的那个概率模型最接近我们想要的那个概率模型，而当我们使用了sigmoid, softmax函数时其实我们海默任其满足了另外一个条件就是最大熵原理。</p>
+<p>对于softmax我们本质上就是需要寻求一个归一化函数但归一化函数有那么多为什么softmax就选择了以<span class="math inline">\(e\)</span>为底的这种形式呢， 这其实就和最大熵有关了。 我们说神经网络是可以用来逼近任意一个概率模型即使这个概率模型我们写不出来也能逼近， 我们是使得似然值最大或者交叉熵最小。其实我们使用这种方法的默认前提是我们认为似然值最大的那个概率模型最接近我们想要的那个概率模型，而当我们使用了sigmoid, softmax函数时其实我们还默任其满足了另外一个条件就是最大熵原理。</p>
 <h3 id="矩">矩</h3>
 <p>首先这里，我们用一个最简单的高斯分布来举例子。 为了确定一个高斯分布，我们只需要确定他的期望和方差就能够确定一个数据分布。 我们的希望是对于任何一个概率分布都能用类似的方法，准确地表示出来。首先我们来看一下，期望和方差是如何表示的：</p>
 <p><img src="./Screen%20Shot%202022-03-07%20at%207.31.53%20pm.jpg" srcset="/img/loading.gif" lazyload /></p>
@@ -340,7 +340,7 @@ H(Y\, |X):=-\sum_{x, y} P(x) P(y \, |\, x)\log (y \, |\, x) = E(H(Y \, |\, X = x
 <p>第一个是我们希望从样本空间中得到的经验概率分布的期望和真实的概率分布期望相等。 第二个条件，实际上是满足整个样本空间所有概率的归一。 因为经验概率分布的期望是个常数所以这里直接用<span class="math inline">\(\Delta_k\)</span> 代替。 对于求它的最小值并且满足两个约束条件，我们就会用到高数上非常熟悉的拉格朗日乘数法，我们引入一个变量<span class="math inline">\(\lambda\)</span> 接着就可以把式子改写成这样。 <img src="./Screen Shot 2022-03-08 at 7.10.52 pm.jpg" srcset="/img/loading.gif" lazyload alt="Screen Shot 2022-03-08 at 7.10.52 pm" style="zoom:50%;" /></p>
 <p>这里需要大家对拉格朗日乘数法有基本的了解（不了解的谷歌去）。 接着我们对拉格朗日函数进行展开， 其实就是对后面的函数的期望展开然后用贝叶斯公式展开就可以获得上面的式子。 接着我们就考虑拉格朗日对偶问题。我们将<span class="math inline">\(P\)</span>作为常数，先求<span class="math inline">\(\lambda\)</span>作为参数的最大值接着把<span class="math inline">\(P\)</span>作为常数，<span class="math inline">\(\lambda\)</span>作为常数求最小值等价于他的对偶问题。<img src="./Screen Shot 2022-03-08 at 7.16.23 pm.jpg" srcset="/img/loading.gif" lazyload alt="Screen Shot 2022-03-08 at 7.16.23 pm" style="zoom:50%;" /></p>
 <p>接着对于求拉格朗日对偶问题的最小值我们就很熟悉了，就是使他的偏导等于零那么拉格朗日函数就能取到最小值。 我们对<span class="math inline">\(L(P,\lambda)\)</span>求关于<span class="math inline">\(P\)</span>的偏导就是上面这样。通过观察我们可以发现每一项都有一个<span class="math inline">\(\tilde{p}(x)\)</span>并且<span class="math inline">\(\sum_x \tilde{p}(x) = 1\)</span>所以我么可以将所有的<span class="math inline">\(\sum_x \tilde{p}(x)\)</span>提出来。然后使它等于0就可以使它的熵大了。<img src="./Screen Shot 2022-03-08 at 7.21.05 pm.jpg" srcset="/img/loading.gif" lazyload alt="Screen Shot 2022-03-08 at 7.21.05 pm" style="zoom:67%;" /></p>
-<p>对于上式我们可以看出使得<span class="math inline">\(\frac{\part L(P, \lambda)}{\part P(y|x)} = 0\)</span> 显然就是使得括号中的部分等于0就可以。因此我们对它进行一个变化就可以得到<span class="math inline">\(P(y\, |\, x)\)</span>的函数形式。 到这里我们应该就感觉到熟悉了</p>
+<p>对于上式我们可以看出使得<span class="math inline">\(\frac{\partial L(P, \lambda)}{\partial P(y|x)} = 0\)</span> 显然就是使得括号中的部分等于0就可以。因此我们对它进行一个变化就可以得到<span class="math inline">\(P(y\, |\, x)\)</span>的函数形式。 到这里我们应该就感觉到熟悉了</p>
 <p><img src="./Screen Shot 2022-03-08 at 7.26.31 pm.jpg" srcset="/img/loading.gif" lazyload alt="Screen Shot 2022-03-08 at 7.26.31 pm" style="zoom:50%;" /></p>
 <p>我们接着对他进行化简，对于前面<span class="math inline">\(e\)</span>的部分我们只需要在指数加个负号就可让他变成分母，对于分子的<span class="math inline">\(e\)</span>的指数如果我们把它用向量的形式表示就可以变成 <span class="math inline">\(\eta\)</span>是一个关于<span class="math inline">\(\lambda\)</span>的向量。 那么关于分母的部分，我们别忘了我们是为什么引入<span class="math inline">\(\lambda_0\)</span>， 我们的目的是加入概率归一这个约束条件。那么对于<span class="math inline">\(P(y\,|\,x)\)</span>这个条件概率我们只需要让他的分母为所有分子的合就可以了。到这里我们就非常熟悉了。</p>
 <p><img src="./Screen%20Shot%202022-03-08%20at%207.35.11%20pm.jpg" srcset="/img/loading.gif" lazyload /></p>
