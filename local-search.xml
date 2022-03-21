@@ -74,13 +74,13 @@
       
       <tag>人工智能</tag>
       
+      <tag>机器学习</tag>
+      
       <tag>数学</tag>
       
       <tag>最大熵</tag>
       
       <tag>条件熵</tag>
-      
-      <tag>机器学习</tag>
       
       <tag>softmax</tag>
       
@@ -103,9 +103,9 @@
     
     <tags>
       
-      <tag>数学</tag>
-      
       <tag>神经网络</tag>
+      
+      <tag>数学</tag>
       
       <tag>梯度</tag>
       
@@ -136,11 +136,11 @@
       
       <tag>人工智能</tag>
       
-      <tag>机器学习</tag>
-      
       <tag>熵</tag>
       
       <tag>信息量</tag>
+      
+      <tag>机器学习</tag>
       
       <tag>神经网络</tag>
       
