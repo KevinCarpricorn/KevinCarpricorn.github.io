@@ -35,7 +35,7 @@
 <meta property="og:image" content="http://example.com/2022/03/09/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E7%9A%84%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/Screen%20Shot%202022-03-21%20at%2011.55.16%20pm.jpg">
 <meta property="og:image" content="http://example.com/2022/03/09/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E7%9A%84%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/Screen%20Shot%202022-03-22%20at%2012.52.17%20am.jpg">
 <meta property="article:published_time" content="2022-03-09T06:01:46.000Z">
-<meta property="article:modified_time" content="2022-03-21T17:21:55.280Z">
+<meta property="article:modified_time" content="2022-03-21T17:29:11.256Z">
 <meta property="article:author" content="Kevin Zheng">
 <meta property="article:tag" content="随机梯度下降">
 <meta property="article:tag" content="牛顿">
@@ -271,7 +271,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：4 分钟前
+                  本文最后更新于：几秒前
                 
               </p>
             
@@ -318,14 +318,14 @@ W_{(t)} &amp;= W_{(t-1)} - \eta \cdot \nabla J \\
 b_{(t)}\\ W_{(t)1} \\ W_{(t)2} \\ \cdots \\ W_{(t)i}
 \end{bmatrix} &amp;=
 \begin{bmatrix} 
-b_{(t-1)}-\eta \cdot \frac{\part J}{\part b} \\
-W_{(t-1)1} - \eta \cdot \frac{\part J}{\part W_1} \\
-W_{(t-1)2} - \eta \cdot \frac{\part J}{\part W_2} \\
+b_{(t-1)}-\eta \cdot \frac{\partial J}{\partial b} \\
+W_{(t-1)1} - \eta \cdot \frac{\partial J}{\partial W_1} \\
+W_{(t-1)2} - \eta \cdot \frac{\partial J}{\partial W_2} \\
 \cdots \\
-W_{(t-1)i} - \eta \cdot \frac{\part J}{\part W_i}
+W_{(t-1)i} - \eta \cdot \frac{\partial J}{\partial W_i}
 \end{bmatrix}
 \end{align}
-\]</span> 为了方便后面的计算我们这里定义一个新的变量 <span class="math inline">\(\Delta W_{(t)i} = \frac{\partial J(W_{(t-1)i})}{\part W_i}\)</span>, 则： <span class="math display">\[
+\]</span> 为了方便后面的计算我们这里定义一个新的变量 <span class="math inline">\(\Delta W_{(t)i} = \frac{\partial J(W_{(t-1)i})}{\partial W_i}\)</span>, 则： <span class="math display">\[
 W_{(t)i} = W_{(t-1)i} - \eta \cdot \Delta W_{(t)i}
 \]</span> 这里定义的<span class="math inline">\(\Delta W_{(t)i}\)</span> 表示的是这个系数在这个维度下应该调整多少，他其实跟原本的本质上是没有区别的，原本的公式是在不同的分量上沿着梯度方向调整，我们只不过为了后面的方便写成这个样子。本来我们有了<span class="math inline">\(\Delta W_{(t)i}\)</span>后就可以直接带入计算了， 但这里我们增加了一个中间过程。 <span class="math display">\[
 \begin{align}
