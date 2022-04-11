@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>将博客搬至CSDN</title>
+    <link href="/2022/04/11/%E5%B0%86%E5%8D%9A%E5%AE%A2%E6%90%AC%E8%87%B3CSDN/"/>
+    <url>/2022/04/11/%E5%B0%86%E5%8D%9A%E5%AE%A2%E6%90%AC%E8%87%B3CSDN/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>梯度下降的优化算法</title>
     <link href="/2022/03/09/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E7%9A%84%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/"/>
     <url>/2022/03/09/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E7%9A%84%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/</url>
@@ -138,15 +151,15 @@
       
       <tag>机器学习</tag>
       
+      <tag>损失函数</tag>
+      
+      <tag>神经网络</tag>
+      
       <tag>熵</tag>
       
       <tag>信息量</tag>
       
-      <tag>神经网络</tag>
-      
       <tag>深度学习</tag>
-      
-      <tag>损失函数</tag>
       
       <tag>交叉熵</tag>
       
@@ -167,11 +180,11 @@
     
     <tags>
       
-      <tag>神经网络</tag>
+      <tag>机器学期</tag>
       
       <tag>损失函数</tag>
       
-      <tag>机器学期</tag>
+      <tag>神经网络</tag>
       
       <tag>最小二乘法</tag>
       
